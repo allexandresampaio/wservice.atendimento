@@ -15,6 +15,7 @@ import br.edu.ifba.mobile.wservice.atendimento.padrao.AtdCalcados;
 import br.edu.ifba.mobile.wservice.atendimento.padrao.AtdVestFem;
 import br.edu.ifba.mobile.wservice.atendimento.padrao.AtdVestMasc;
 import br.edu.ifba.mobile.wservice.atendimento.padrao.Atendente;
+import br.edu.ifba.mobile.wservice.atendimento.padrao.TipoDuvida;
 
 @Path("ws")
 public class Atendimento {
@@ -27,46 +28,60 @@ public class Atendimento {
 	}
 
 	@GET
-	@Path("/atendentes")
+	@Path("/tiposDuvida")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Atendente> getAtendentes() {
+	public List<String> getTiposDeDuvida() {
 		
-		List<Atendente> atendentes = new ArrayList<Atendente>();
+		List<String> tipos = new ArrayList<String>();
 		
-		Atendente atd = new AtdCalcados("Ferris");
-		atd.setProximo(new AtdVestFem("Sloane"));
-		atd.setProximo(new AtdVestMasc("Cameron"));
-
-		while (atd != null){//verificar aqui se precisa colocar um por um, pq o retorno pega os encadeados
-			atendentes.add(atd);
-			atd = atd.getProximo();
-		}
+		tipos.add("Calçados");
+		tipos.add("Vestuário Feminino");
+		tipos.add("Vestuário Masculino");
 		
-		return atendentes;
+		return tipos;
+		
 	}
 
 	@GET//antes era POST mas ai n retornava
-	@Path("/solicitacao/{nome}/{cpf}")
+	@Path("/solicitacao/{tipo}/{cpf}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String solicitarAtendimento(
-			@PathParam("nome") String nome,
+			@PathParam("tipo") String tipo,
 			@PathParam("cpf") int cpf) {
-				
-		System.out.println("CPF do cliente: " + cpf);
-		System.out.println("Nome do cliente: " + nome);
 		
-		String resultado = "Solicitação de atendimento realizada!";
+		TipoDuvida tipoDuvida = TipoDuvida.SEMDUVIDA;
+		if ("Calçados".equals(tipo)){
+			tipoDuvida = TipoDuvida.CALCADOS;
+		} else if ("Vestuário Feminino".equals(tipo)){
+			tipoDuvida = TipoDuvida.VESTFEM;
+		} else if ("Vestuário Masculino".equals(tipo)){
+			tipoDuvida = TipoDuvida.VESTMASC;
+		}
+		
+		String resultado = getAtendente(tipoDuvida);
+		
+		System.out.println("CPF do cliente: " + cpf);
+		System.out.println("Tipo de atendimento: " + tipo);
+		
 		return resultado;
+	}
+	
+	private String getAtendente(TipoDuvida tipoDuvida){
+		Atendente atd = new AtdCalcados("Ferris");
+		atd.setProximo(new AtdVestFem("Sloane"));
+		atd.setProximo(new AtdVestMasc("Cameron"));
+		
+		return atd.resolverDuvida(tipoDuvida);
 	}
 
 	@GET//antes era DELETE mas ai n retornava
-	@Path("/cancelamento/{nome}/{cpf}")
+	@Path("/cancelamento/{tipo}/{cpf}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String cancelarAtendimento(
-			@PathParam("nome") String nome,
+			@PathParam("tipo") String tipo,
 			@PathParam("cpf") int cpf) {
 		System.out.println("CPF do cliente cancelado: " + cpf);
-		System.out.println("Nome do cliente cancelado: " + nome);
+		System.out.println("Tpo do atendimento cancelado: " + tipo);
 
 		String resultado = "Atendimento cancelado!";
 		return resultado;
