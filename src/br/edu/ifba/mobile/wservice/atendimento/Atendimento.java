@@ -1,16 +1,14 @@
 package br.edu.ifba.mobile.wservice.atendimento;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.edu.ifba.mobile.wservice.atendimento.duvida.Duvida;
 import br.edu.ifba.mobile.wservice.atendimento.padrao.AtdCalcados;
 import br.edu.ifba.mobile.wservice.atendimento.padrao.AtdVestFem;
 import br.edu.ifba.mobile.wservice.atendimento.padrao.AtdVestMasc;
@@ -32,13 +30,14 @@ public class Atendimento {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> getTiposDeDuvida() {
 		
-		List<String> tipos = new ArrayList<String>();
+		Duvida tipos = new Duvida();
+		//List<String> tipos = new ArrayList<String>();
 		
-		tipos.add("Calçados");
-		tipos.add("Vestuário Feminino");
-		tipos.add("Vestuário Masculino");
+	//	tipos.add("Calçados");
+	//	tipos.add("Vestuário Feminino");
+	//	tipos.add("Vestuário Masculino");
 		
-		return tipos;
+		return tipos.getTiposDeDuvida();
 		
 	}
 
