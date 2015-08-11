@@ -2,7 +2,9 @@ package br.edu.ifba.mobile.wservice.atendimento;
 
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -41,7 +43,7 @@ public class Atendimento {
 		
 	}
 
-	@GET//antes era POST mas ai n retornava
+	@POST//antes era POST mas ai n retornava
 	@Path("/solicitacao/{tipo}/{cpf}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String solicitarAtendimento(
@@ -73,7 +75,7 @@ public class Atendimento {
 		return atd.resolverDuvida(tipoDuvida);
 	}
 
-	@GET//antes era DELETE mas ai n retornava
+	@DELETE//antes era DELETE mas ai n retornava
 	@Path("/cancelamento/{tipo}/{cpf}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String cancelarAtendimento(
